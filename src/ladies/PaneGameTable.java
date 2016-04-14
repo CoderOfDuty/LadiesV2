@@ -24,6 +24,7 @@ public class PaneGameTable extends JPanel implements ActionListener {
 	int num = 0;
 	ImageIcon b;
 	ImageIcon n;
+	int anterior=-1;
 
 	int turno = BLANCAS;
 	int origen;
@@ -90,7 +91,10 @@ public class PaneGameTable extends JPanel implements ActionListener {
 		
 		int botonSelectedId = button.getId();
 		int estado = button.getEstado();
-		
+		if(anterior!=-1){
+			origen=anterior;
+			anterior=-1;
+		}
 		if (estado == turno) {
 			if(moveDone&&botonSelectedId!=origen&&estado==turno){}
 			else{
@@ -117,63 +121,88 @@ public class PaneGameTable extends JPanel implements ActionListener {
 				}
 			}
 		} else if (estado == PaneGameTable.EMPTY && origen != -1) {
-
-			arrayButtons[origen].setEstado(EMPTY);
-			arrayButtons[origen].setIcon(null);
-			arrayButtons[origen].setBackground(Color.BLACK);
-			if (turno == BLANCAS) {
-				button.setEstado(BLANCAS);
-				button.setIcon(b);
-			} else {
-				button.setEstado(NEGRAS);
-				button.setIcon(n);
+			int movimiento;
+			movimiento=comprovarMovimiento(origen,botonSelectedId);
+			if(movimiento==0){//moverse sin matar
+				arrayButtons[origen].setEstado(EMPTY);
+				arrayButtons[origen].setIcon(null);
+				arrayButtons[origen].setBackground(Color.BLACK);
+				if (turno == BLANCAS) {
+					button.setEstado(BLANCAS);
+					button.setIcon(b);
+				} else {
+					button.setEstado(NEGRAS);
+					button.setIcon(n);
+				}
+				button.setBackground(Color.BLUE);
 			}
-			button.setBackground(Color.BLUE);
-			System.out.println("Movimiento");
-
+			else if(movimiento==-1){//no te puedes mover
+				anterior=origen;
+			} 
+			else{ //el valor movimiento es el ID de la ficha que se elimina
+				arrayButtons[origen].setEstado(EMPTY);
+				arrayButtons[origen].setIcon(null);
+				arrayButtons[origen].setBackground(Color.BLACK);
+				if (turno == BLANCAS) {
+					button.setEstado(BLANCAS);
+					button.setIcon(b);
+				} else {
+					button.setEstado(NEGRAS);
+					button.setIcon(n);
+				}
+				button.setBackground(Color.BLUE);
+				arrayButtons[movimiento].setEstado(EMPTY);
+				arrayButtons[movimiento].setIcon(null);
+				arrayButtons[movimiento].setBackground(Color.BLACK);
+			}
 			origen=botonSelectedId;
 			moveDone = true;
+		} 
+			
 
-		} else {
-			System.out.println("Estado: " + estado);
-			System.out.println("Origen: " + origen);
+		  
+	}
+
+	private int comprovarMovimiento(int origen, int botonSelectedId) {
+		int direccion;
+		if(turno==1){
+			direccion=-1;
+		}
+		else{
+			direccion=1;
 		}
 
-		/*
-		 * movimiento=comprovarMovimeiento(origen, botonSelected); //0 si se
-		 * puede mover, 1 no se puede mover, else el ID que mata
-		 * if(movimiento==0){ //moverse sin matar
-		 * arrayButtons[origen].setEstado(0);
-		 * arrayButtons[botonSelected].setEstado(turno); } else
-		 * if(movimiento==-1){} //no te puedes mover else{ //el valor movimiento
-		 * es el ID de la ficha que se elimina
-		 * arrayButtons[origen].setEstado(0);
-		 * arrayButtons[movimiento].setEstado(0);
-		 * arrayButtons[botonSelected].setEstado(turno); } origen=0; }
-		 * 
-		 * comprovarMovimiento(int origen, int botonSelected){ int direccion;
-		 * if(turno==1){ direccion=-1; } else{ direccion=1; }
-		 * 
-		 * if(origen%8==0){ if(botonSelected-origen==7*direccion){return 0;}
-		 * if(botonSelected-origen==14*direccion){ return
-		 * comprovarEliminacion(origen,destino); } } else
-		 * if(origen%8==1||origen=1){
-		 * if(botonSelected-origen==9*direccion){return 0;}
-		 * if(botonSelected-origen==18*direccion){ return
-		 * comprovarEliminacion(origen,destino); } } else{
-		 * if(botonSelected-origen==7*direccion||botonSelected-origen==9*
-		 * direccion){return 0;}
-		 * if(botonSelected-origen==14*direccion||botonSelected-origen==18*
-		 * direccion){ return comprovarEliminacion(origen,destino); } } }
-		 * 
-		 * comprovarEliminacion(int origen, int destino){ int
-		 * eliminada=origen+((destino-origen)/2);
-		 * if(arrayButtons[eliminada].getEstado()!turno&&estado!=0){ return
-		 * eliminada; } return -1; }
-		 * 
-		 * 
-		 */
-
+		if(origen+1%8==0){
+			if(botonSelectedId-origen==7*direccion){return 0;}
+			if(botonSelectedId-origen==14*direccion){
+				return comprovarEliminacion(origen,botonSelectedId);
+			}
+		}
+		else if(origen+1%8==1||origen==0){
+			if(botonSelectedId-origen==9*direccion){return 0;}
+			if(botonSelectedId-origen==18*direccion){
+				return comprovarEliminacion(origen,botonSelectedId);
+			}
+		}
+		else{
+			if(botonSelectedId-origen==7*direccion||botonSelectedId-origen==9*direccion){return 0;}
+			if(botonSelectedId-origen==14*direccion||botonSelectedId-origen==18*direccion){
+				return comprovarEliminacion(origen,botonSelectedId);
+			}
+		}
+		return -1;
 	}
+
+	private int comprovarEliminacion(int origen, int botonSelectedId) {
+		int eliminada=origen+((botonSelectedId-origen)/2);
+		if(arrayButtons[eliminada].getEstado()==turno||arrayButtons[eliminada].getEstado()==0){
+			return -1;
+		}
+		else{
+			return eliminada;
+		}
+	}
+	
+	
 
 }
