@@ -123,7 +123,10 @@ public class PaneGameTable extends JPanel implements ActionListener {
 		} else if (estado == PaneGameTable.EMPTY && origen != -1) {
 			int movimiento;
 			movimiento=comprovarMovimiento(origen,botonSelectedId);
-			if(movimiento==0){//moverse sin matar
+			if(movimiento==0&&moveDone)
+				anterior=origen;
+			else if(movimiento==0){//moverse sin matar
+				moveDone = true;
 				arrayButtons[origen].setEstado(EMPTY);
 				arrayButtons[origen].setIcon(null);
 				arrayButtons[origen].setBackground(Color.BLACK);
@@ -134,12 +137,20 @@ public class PaneGameTable extends JPanel implements ActionListener {
 					button.setEstado(NEGRAS);
 					button.setIcon(n);
 				}
-				button.setBackground(Color.BLUE);
+				button.setBackground(Color.BLACK);
+				if (turno == BLANCAS){
+					turno = NEGRAS;
+				}else{
+					turno = BLANCAS;
+				}
+				origen = -1;
+				moveDone= false;
 			}
 			else if(movimiento==-1){//no te puedes mover
 				anterior=origen;
 			} 
 			else{ //el valor movimiento es el ID de la ficha que se elimina
+				moveDone = true;
 				arrayButtons[origen].setEstado(EMPTY);
 				arrayButtons[origen].setIcon(null);
 				arrayButtons[origen].setBackground(Color.BLACK);
@@ -156,7 +167,6 @@ public class PaneGameTable extends JPanel implements ActionListener {
 				arrayButtons[movimiento].setBackground(Color.BLACK);
 			}
 			origen=botonSelectedId;
-			moveDone = true;
 		} 
 			
 
