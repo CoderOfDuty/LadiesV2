@@ -84,42 +84,38 @@ public class PaneGameTable extends JPanel implements ActionListener {
 		}
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		JButtonTaulell button = (JButtonTaulell) e.getSource();
 		
 		int botonSelectedId = button.getId();
 		int estado = button.getEstado();
-
+		
 		if (estado == turno) {
-			System.out.println("Id: " + botonSelectedId);
-			System.out.println("Estado: " + estado);
-			System.out.println("Origen: " + origen);
-			button.setBackground(Color.BLUE);
-			if (origen != -1)
-				arrayButtons[origen].setBackground(Color.BLACK);
-			/*
-			 * //Comprovoar si estas obligado a matar
-			 * if(obligadoAMatar&&laFichaSeleccionadaNoEsLaCorrecta){origen=0;}
-			 * else{ cambiar imagen boton a seleccionado deseleccionar otros }
-			 */
+			if(moveDone&&botonSelectedId!=origen&&estado==turno){}
+			else{
+				button.setBackground(Color.BLUE);
+				if (origen != -1)
+					arrayButtons[origen].setBackground(Color.BLACK);
+					/*
+				 	* //Comprovoar si estas obligado a matar
+			 		* if(obligadoAMatar&&laFichaSeleccionadaNoEsLaCorrecta){origen=0;}
+			 		* else{ cambiar imagen boton a seleccionado deseleccionar otros }
+			 		*/
 			
-			if (botonSelectedId == origen && moveDone == true) {
-				button.setBackground(Color.BLACK);
-				if (turno == BLANCAS){
-					turno = NEGRAS;
+				if (botonSelectedId == origen && moveDone == true) {
+					button.setBackground(Color.BLACK);
+					if (turno == BLANCAS){
+						turno = NEGRAS;
+					}else{
+						turno = BLANCAS;
+					}
+					origen = -1;
+					moveDone= false;
 				}else{
-					turno = BLANCAS;
+					origen = botonSelectedId;
 				}
-				origen = -1;
-				moveDone= false;
-			}else{
-				origen = botonSelectedId;
 			}
-
-			
-
 		} else if (estado == PaneGameTable.EMPTY && origen != -1) {
 
 			arrayButtons[origen].setEstado(EMPTY);
