@@ -84,7 +84,6 @@ public class Run extends JFrame {
 			add(menuHelp);
 		}
 
-		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			JMenuItem button = ((JMenuItem) e.getSource());
