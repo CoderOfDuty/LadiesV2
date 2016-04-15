@@ -152,12 +152,41 @@ public class PaneGameTable extends JPanel implements ActionListener {
 				arrayButtons[movimiento].setEstado(EMPTY);
 				arrayButtons[movimiento].setIcon(null);
 				arrayButtons[movimiento].setBackground(Color.BLACK);
+				if(seguirMatando(origen, botonSelectedId)==false)
+					changeTurn(button);
 			}
 			origen=botonSelectedId;
 		} 
 			
 
 		  
+	}
+
+	private boolean seguirMatando(int origen, int botonSelectedId) {
+		int direccion;
+		if(turno==1){
+			direccion=-1;
+		}
+		else{
+			direccion=1;
+		}
+		if(botonSelectedId+18*direccion<0||botonSelectedId+18*direccion>63)
+			return false;
+		if(botonSelectedId+1%8==0){
+			if(arrayButtons[botonSelectedId+7*direccion].getEstado()==0||arrayButtons[botonSelectedId+7*direccion].getEstado()==turno){return false;}
+			if(arrayButtons[botonSelectedId+14*direccion].getEstado()!=0){ return false;}
+			return true;
+		}
+		else if(botonSelectedId+1%8==1||botonSelectedId==0){
+			if(arrayButtons[botonSelectedId+9*direccion].getEstado()==0||arrayButtons[botonSelectedId+9*direccion].getEstado()==turno){return false;}
+			if(arrayButtons[botonSelectedId+18*direccion].getEstado()!=0){ return false;}
+			return true;
+		}
+		else{
+			if((arrayButtons[botonSelectedId+(9*direccion)].getEstado()==0||arrayButtons[botonSelectedId+(9*direccion)].getEstado()==turno)&&(arrayButtons[botonSelectedId+(7*direccion)].getEstado()==0||arrayButtons[botonSelectedId+(7*direccion)].getEstado()==turno)){return false;}
+			if((arrayButtons[botonSelectedId+(14*direccion)].getEstado()!=0)&&(arrayButtons[botonSelectedId+(18*direccion)].getEstado()!=0)){return false;}
+			return true;
+		}
 	}
 
 	private void changeTurn(JButtonTaulell button) {
