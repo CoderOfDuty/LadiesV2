@@ -174,17 +174,17 @@ public class PaneGameTable extends JPanel implements ActionListener {
 			return false;
 		if(botonSelectedId+1%8==0){
 			if(arrayButtons[botonSelectedId+7*direccion].getEstado()==0||arrayButtons[botonSelectedId+7*direccion].getEstado()==turno){return false;}
-			if(arrayButtons[botonSelectedId+14*direccion].getEstado()!=0){ return false;}
+			if(arrayButtons[botonSelectedId+14*direccion].getEstado()!=0&&(botonSelectedId+14*direccion<0||botonSelectedId+14*direccion>63)){ return false;}
 			return true;
 		}
 		else if(botonSelectedId+1%8==1||botonSelectedId==0){
 			if(arrayButtons[botonSelectedId+9*direccion].getEstado()==0||arrayButtons[botonSelectedId+9*direccion].getEstado()==turno){return false;}
-			if(arrayButtons[botonSelectedId+18*direccion].getEstado()!=0){ return false;}
+			if(arrayButtons[botonSelectedId+18*direccion].getEstado()!=0&&(botonSelectedId+18*direccion<0||botonSelectedId+18*direccion>63)){ return false;}
 			return true;
 		}
 		else{
 			if((arrayButtons[botonSelectedId+(9*direccion)].getEstado()==0||arrayButtons[botonSelectedId+(9*direccion)].getEstado()==turno)&&(arrayButtons[botonSelectedId+(7*direccion)].getEstado()==0||arrayButtons[botonSelectedId+(7*direccion)].getEstado()==turno)){return false;}
-			if((arrayButtons[botonSelectedId+(14*direccion)].getEstado()!=0)&&(arrayButtons[botonSelectedId+(18*direccion)].getEstado()!=0)){return false;}
+			if((arrayButtons[botonSelectedId+(14*direccion)].getEstado()!=0&&(botonSelectedId+14*direccion<0||botonSelectedId+14*direccion>63))&&(arrayButtons[botonSelectedId+(18*direccion)].getEstado()!=0)&&(botonSelectedId+18*direccion<0||botonSelectedId+18*direccion>63)){return false;}
 			return true;
 		}
 	}
