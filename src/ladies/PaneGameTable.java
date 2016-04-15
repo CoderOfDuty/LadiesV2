@@ -99,24 +99,18 @@ public class PaneGameTable extends JPanel implements ActionListener {
 			if(moveDone&&botonSelectedId!=origen&&estado==turno){}
 			else{
 				button.setBackground(Color.BLUE);
-				if (origen != -1)
+				if (origen != -1 && origen != botonSelectedId)
 					arrayButtons[origen].setBackground(Color.BLACK);
+				else if ((origen != -1 && origen == botonSelectedId)){}
 					/*
 				 	* //Comprovoar si estas obligado a matar
 			 		* if(obligadoAMatar&&laFichaSeleccionadaNoEsLaCorrecta){origen=0;}
 			 		* else{ cambiar imagen boton a seleccionado deseleccionar otros }
 			 		*/
 			
-				if (botonSelectedId == origen && moveDone == true) {
-					button.setBackground(Color.BLACK);
-					if (turno == BLANCAS){
-						turno = NEGRAS;
-					}else{
-						turno = BLANCAS;
-					}
-					origen = -1;
-					moveDone= false;
-				}else{
+				if (botonSelectedId == origen && moveDone == true)
+					changeTurn(button);
+				else{
 					origen = botonSelectedId;
 				}
 			}
@@ -137,14 +131,7 @@ public class PaneGameTable extends JPanel implements ActionListener {
 					button.setEstado(NEGRAS);
 					button.setIcon(n);
 				}
-				button.setBackground(Color.BLACK);
-				if (turno == BLANCAS){
-					turno = NEGRAS;
-				}else{
-					turno = BLANCAS;
-				}
-				origen = -1;
-				moveDone= false;
+				changeTurn(button);
 			}
 			else if(movimiento==-1){//no te puedes mover
 				anterior=origen;
@@ -171,6 +158,17 @@ public class PaneGameTable extends JPanel implements ActionListener {
 			
 
 		  
+	}
+
+	private void changeTurn(JButtonTaulell button) {
+		button.setBackground(Color.BLACK);
+		if (turno == BLANCAS){
+			turno = NEGRAS;
+		}else{
+			turno = BLANCAS;
+		}
+		origen = -1;
+		moveDone= false;
 	}
 
 	private int comprovarMovimiento(int origen, int botonSelectedId) {
